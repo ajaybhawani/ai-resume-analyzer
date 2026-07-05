@@ -5,7 +5,7 @@ import Navbar from "~/components/Navbar";
 import { convertPdfToImage } from "~/lib/pdf2img";
 import { usePuterStore } from "~/lib/puter";
 import { generateUUID } from "~/lib/utils";
-import { prepareInstructions } from "../../constants/Index";
+import { AIResponseFormat, prepareInstructions } from "../../constants/index";
 const Upload = () => {
   const { auth, isLoading, fs, ai, kv } = usePuterStore();
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Upload = () => {
       companyName,
       jobTitle,
       jobDescription,
-      feedback: "",
+      feedback: null as Feedback | null,
     };
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
 
@@ -58,7 +58,7 @@ const Upload = () => {
 
     const feedback = await ai.feedback(
       uploadedFile.path,
-      prepareInstructions({ jobTitle, jobDescription }),
+      prepareInstructions({ jobTitle, jobDescription, AIResponseFormat }),
     );
 
     if (!feedback) return setStatusText("Error: Failed to analyze resume");
@@ -68,7 +68,33 @@ const Upload = () => {
         ? feedback.message.content
         : feedback.message.content[0].text;
 
-    data.feedback = JSON.parse(feedbackText);
+    // Models sometimes wrap JSON in ```json ... ``` fences or add stray text.
+    // Strip fences, then fall back to the outermost { ... } block.
+    const cleaned = feedbackText
+      .trim()
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/```\s*$/i, "");
+    let parsedFeedback: Feedback | null = null;
+    try {
+      parsedFeedback = JSON.parse(cleaned) as Feedback;
+    } catch {
+      const start = cleaned.indexOf("{");
+      const end = cleaned.lastIndexOf("}");
+      if (start !== -1 && end > start) {
+        try {
+          parsedFeedback = JSON.parse(cleaned.slice(start, end + 1)) as Feedback;
+        } catch {
+          parsedFeedback = null;
+        }
+      }
+    }
+
+    if (!parsedFeedback)
+      return setStatusText(
+        "Error: The AI response could not be read. Please try again.",
+      );
+
+    data.feedback = parsedFeedback;
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
     setStatusText("Analysis complete, redirecting...");
     navigate(`/resume/${uuid}`);
@@ -83,7 +109,7 @@ const Upload = () => {
     const jobTitle = formData.get("job-title") as string;
     const jobDescription = formData.get("job-description") as string;
 
-    if (!form) return;
+    if (!file) return setStatusText("Error: Please upload a resume first");
 
     handleAnalyze({ companyName, jobTitle, jobDescription, file });
   };
