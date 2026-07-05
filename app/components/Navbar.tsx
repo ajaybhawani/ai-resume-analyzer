@@ -13,7 +13,9 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <Link to="/">
-        <p className="text-gradient text-xl sm:text-2xl font-bold">RESUMIND</p>
+        <p className="text-gradient text-xl sm:text-2xl font-bold">
+          RESUMIND AI
+        </p>
       </Link>
       <div className="flex flex-row items-center gap-2 sm:gap-3">
         <Link to="/upload">

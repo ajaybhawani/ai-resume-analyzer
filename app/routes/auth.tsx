@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import { usePuterStore } from "~/lib/puter";
 
 export const meta = () => [
-  { title: "Resumind | Auth" },
+  { title: "Resumind AI | Auth" },
   {
     name: "description",
     content: "Log into your account",
@@ -44,7 +44,7 @@ const Auth = () => {
             </div>
             <div className="flex flex-col gap-1">
               <h1 className="text-2xl! sm:text-3xl! leading-tight">
-                Welcome to Resumind
+                Welcome to Resumind AI
               </h1>
               <h2 className="text-sm! sm:text-base! text-dark-200">
                 Log in to continue your job journey

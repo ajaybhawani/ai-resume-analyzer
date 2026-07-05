@@ -7,7 +7,7 @@ import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Resumind" },
+    { title: "Resumind AI" },
     { name: "description", content: "Smart feedback for your dream job" },
   ];
 }
