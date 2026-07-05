@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { usePuterStore } from "~/lib/puter";
 
 export const meta = () => [
@@ -11,8 +11,8 @@ export const meta = () => [
 ];
 const Auth = () => {
   const { isLoading, auth } = usePuterStore();
-  const loaction = useLocation();
-  const next = loaction.search.split("=")[1];
+  const [searchParams] = useSearchParams();
+  const next = searchParams.get("next") || "/";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,12 +22,14 @@ const Auth = () => {
   }, [auth.isAuthenticated, next]);
 
   return (
-    <main className="bg-[url('/images/bg-auth.svg')] bg-cover min-h-screen flex items-center justify-center">
-      <div className="gradient-border shadow-lg">
-        <section className="flex flex-col gap-8 bg-white rounded-2xl p-10">
-          <div className="flex flex-col gap-2 items-center text-center">
-            <h1>Welcome to Resumind</h1>
-            <h2>Log In to Continue Your Job Journey</h2>
+    <main className="bg-[url('/images/bg-auth.svg')] bg-cover min-h-screen flex items-center justify-center p-4">
+      <div className="gradient-border shadow-lg w-full max-w-sm sm:max-w-md">
+        <section className="flex flex-col gap-5 sm:gap-6 bg-white rounded-2xl p-6 sm:p-8">
+          <div className="flex flex-col gap-1.5 items-center text-center">
+            <h1 className="text-2xl sm:text-3xl">Welcome to Resumind</h1>
+            <h2 className="text-sm sm:text-base">
+              Log In to Continue Your Job Journey
+            </h2>
           </div>
           <div>
             {isLoading ? (

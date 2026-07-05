@@ -7,7 +7,7 @@ const ScoreCircle = ({ score = 75 }: { score: number }) => {
   const strokeDashoffset = circumference * (1 - progress);
 
   return (
-    <div className="relative w-25 h-25">
+    <div className="relative w-20 h-20 sm:w-24 sm:h-24">
       <svg
         height="100%"
         width="100%"

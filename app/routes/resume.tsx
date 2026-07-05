@@ -60,9 +60,9 @@ const Resume = () => {
         </Link>
       </nav>
       <div className="flex flex-row w-full max-lg:flex-col-reverse">
-        <section className="feedback-section bg-[url('/images/bg-small.svg') bg-cover h-screen sticky top-0 items-center justify-center">
+        <section className="feedback-section bg-[url('/images/bg-small.svg') bg-cover lg:h-screen lg:sticky lg:top-0 items-center justify-center">
           {imageUrl && resumeUrl && (
-            <div className="animate-in fade-in duration-1000 gradient-border max-sm:m-0 h-[90%] max-wxl:h-fit w-fit">
+            <div className="animate-in fade-in duration-1000 gradient-border max-sm:m-0 lg:h-[90%] h-fit w-fit max-w-full">
               <a href={resumeUrl} target="_blank" rel="noopener noreferrer">
                 <img
                   src={imageUrl}
@@ -74,7 +74,9 @@ const Resume = () => {
           )}
         </section>
         <section className="feedback-section">
-          <h2 className="text-4xl text-black! font-bold">Resume Review</h2>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl text-black! font-bold">
+            Resume Review
+          </h2>
           {feedback ? (
             <div className="flex flex-col gap-8 animate-in fade-in duration-1000">
               <div className="flex flex-col gap-8 animate-in fade-in duration-1000">
@@ -87,7 +89,10 @@ const Resume = () => {
               </div>
             </div>
           ) : (
-            <img src="/images/resume-scan-2.gif" className="w-full" />
+            <img
+              src="/images/resume-scan-2.gif"
+              className="w-full max-w-[400px] mx-auto"
+            />
           )}
         </section>
       </div>

@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { formatSize } from "~/lib/utils";
 
@@ -7,23 +7,23 @@ interface FileUploaderProps {
 }
 
 const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
+  const [file, setFile] = useState<File | null>(null);
+
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      const file = acceptedFiles[0] || null;
-      onFileSelect?.(file);
+      const selected = acceptedFiles[0] || null;
+      setFile(selected);
+      onFileSelect?.(selected);
     },
     [onFileSelect],
   );
 
-  const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
-    useDropzone({
-      onDrop,
-      multiple: false,
-      accept: { "application/pdf": [".pdf"] },
-      maxSize: 20 * 1024 * 1024,
-    });
-
-  const file = acceptedFiles[0] || null;
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    multiple: false,
+    accept: { "application/pdf": [".pdf"] },
+    maxSize: 20 * 1024 * 1024,
+  });
 
   return (
     <div className="gradient-border w-full">
@@ -44,8 +44,11 @@ const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
                 <p className="text-sm text-gray-500">{formatSize(file.size)}</p>
               </div>
               <button
+                type="button"
                 className="text-sm cursor-pointer p-2"
                 onClick={(e) => {
+                  e.stopPropagation();
+                  setFile(null);
                   onFileSelect?.(null);
                 }}
               >
@@ -54,14 +57,18 @@ const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
             </div>
           ) : (
             <div>
-              <div className="mx-auto w-16 h-16 flex items-center justify-center mb-2">
-                <img src="/icons/info.svg" alt="upload" className="size-10" />
+              <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mb-2">
+                <img
+                  src="/icons/info.svg"
+                  alt="upload"
+                  className="size-8 sm:size-10"
+                />
               </div>
-              <p className="text-lg text-gray-500">
+              <p className="text-base sm:text-lg text-gray-500">
                 <span className="font-semibold">Click to upload</span> or drag
                 and drop
               </p>
-              <p className="text-lg text-gray-500">PDF (max 20 MB)</p>
+              <p className="text-base sm:text-lg text-gray-500">PDF (max 20 MB)</p>
             </div>
           )}
         </div>

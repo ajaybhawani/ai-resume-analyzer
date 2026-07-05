@@ -39,19 +39,21 @@ const WipeApp = () => {
   }
 
   return (
-    <div>
-      Authenticated as: {auth.user?.username}
-      <div>Existing files:</div>
-      <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full max-w-2xl mx-auto p-4 sm:p-6">
+      <p className="text-sm sm:text-base break-words">
+        Authenticated as: {auth.user?.username}
+      </p>
+      <div className="font-semibold">Existing files:</div>
+      <div className="flex flex-col gap-2 sm:gap-4">
         {files.map((file) => (
           <div key={file.id} className="flex flex-row gap-4">
-            <p>{file.name}</p>
+            <p className="break-all">{file.name}</p>
           </div>
         ))}
       </div>
       <div>
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer"
+          className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer w-full sm:w-auto"
           onClick={() => handleDelete()}
         >
           Wipe App Data

@@ -51,11 +51,11 @@ const ResumeCard = ({
       </div>
       {resumeUrl && (
         <div className="gradient-border animate-in fade-in duration-1000">
-          <div className="w-fullh-full">
+          <div className="w-full h-full">
             <img
               src={resumeUrl}
               alt="resume"
-              className="w-full h-87.5 max-sm:h-50 object-cover object-top"
+              className="w-full h-50 sm:h-70 lg:h-75 xl:h-80 object-cover object-top rounded-2xl"
             />
           </div>
         </div>
